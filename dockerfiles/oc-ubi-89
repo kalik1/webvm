@@ -1,0 +1,34 @@
+# Start from the Red Hat Enterprise Linux image
+FROM registry.access.redhat.com/ubi8/ubi:latest
+
+# Set environment variables
+ENV HOME="/home/user" \
+    TERM="xterm" \
+    USER="user" \
+    SHELL="/bin/bash" \
+    EDITOR="vim" \
+    LANG="en_US.UTF-8" \
+    LC_ALL="C"
+
+# Create a user
+RUN useradd -m -d $HOME $USER
+
+# Install necessary packages
+RUN yum install -y vim bash-completion
+
+# Download and install the OpenShift CLI
+RUN curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz && \
+    tar -xvzf openshift-client-linux.tar.gz -C /usr/local/bin/ oc kubectl && \
+    rm -f openshift-client-linux.tar.gz
+
+# Set up bash completion for OpenShift CLI
+RUN oc completion bash >/etc/bash_completion.d/oc_completion
+
+# Switch to your user
+USER $USER
+
+# Set the working directory
+WORKDIR $HOME
+
+# Default command
+CMD ["/bin/bash"]
