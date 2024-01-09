@@ -1,5 +1,5 @@
 # Start from the Red Hat Enterprise Linux image
-FROM registry.access.redhat.com/ubi8/ubi:8.9-1028
+FROM i386/centos:7.9.2009
 
 # Set environment variables
 ENV HOME="/home/user" \
